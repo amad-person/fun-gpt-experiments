@@ -18,10 +18,6 @@ load_dotenv()
 st.set_page_config(layout="wide")
 st.title("Code RAG")
 
-faker_code_urls = [
-
-]
-
 with open(Path(__file__).parent / "./faker_docs_urllist.txt", "r") as file:
     faker_docs_urls = [x.strip() for x in file.readlines()]
 
@@ -36,7 +32,7 @@ with st.form("question_list_form"):
                                                                                 "first name, last name.")
     submitted = st.form_submit_button("Submit")
     if submitted:
-        loader = WebBaseLoader(faker_code_urls + faker_docs_urls)
+        loader = WebBaseLoader(faker_docs_urls)
         docs = loader.load()
 
         embeddings = OpenAIEmbeddings()
