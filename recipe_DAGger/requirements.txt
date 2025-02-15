@@ -1,0 +1,7 @@
+transformers==4.48.3
+torch==2.6.0
+dspy==2.6.3
+datasets==3.3.0
+pydantic==2.10.6
+streamlit==1.42.0
+beautifulsoup4==4.13.3
