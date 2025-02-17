@@ -6,13 +6,13 @@ class RecipeNode(BaseModel):
     instr: str
 
 
-class RecipeGraph(BaseModel):
+class RecipeAdjListGraph(BaseModel):
     nodes: list[RecipeNode] = []
     adjacency_list: dict[int, list[int]] = {}
 
-    def get_node_by_id(self, id):
+    def get_node_by_id(self, node_id: int):
         for u in self.nodes:
-            if u.id == id:
+            if u.id == node_id:
                 return u
 
     def add_node(self, node: RecipeNode):
@@ -26,6 +26,34 @@ class RecipeGraph(BaseModel):
         ):
             self.adjacency_list[source_node_id].append(dest_node_id)
         else:
-            raise ValueError(
-                f"Error: either source node {source_node_id} or dest node {dest_node_id} not present in graph."
+            if source_node_id not in self.adjacency_list.keys():
+                raise ValueError(
+                    f"Error: source node {source_node_id} not present in graph."
+                )
+
+            if dest_node_id not in self.adjacency_list.keys():
+                raise ValueError(
+                    f"Error: dest node {dest_node_id} not present in graph."
+                )
+
+
+class Edge(BaseModel):
+    source_node_id: int
+    dest_node_id: int
+
+
+class RecipeEdgeListGraph(BaseModel):
+    nodes: list[RecipeNode]
+    edge_list: list[Edge]
+
+    def to_recipe_adj_list_graph(self) -> RecipeAdjListGraph:
+        graph = RecipeAdjListGraph()
+
+        for node in self.nodes:
+            graph.add_node(node)
+
+        for edge in self.edge_list:
+            graph.add_edge(
+                source_node_id=edge.source_node_id, dest_node_id=edge.dest_node_id
             )
+        return graph

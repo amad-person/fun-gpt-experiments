@@ -1,13 +1,14 @@
 from pydantic import BaseModel
-from recipe_graph import RecipeGraph
+
+from recipe_graph import RecipeAdjListGraph
 
 
 class RecipeSchedule(BaseModel):
-    recipe_graph: RecipeGraph
+    recipe_graph: RecipeAdjListGraph
     max_width: int
     levels: dict[int, list[int]] = {}
 
-    def get_report(self):
+    def print_report(self):
         for i, level in enumerate(reversed(self.levels.keys())):
             print(f"Tasks for time step {i + 1}:")
 
@@ -20,7 +21,7 @@ class RecipeSchedule(BaseModel):
             print("\n".join(tasks))
 
 
-def get_transitive_reduction(graph: RecipeGraph) -> RecipeGraph:
+def get_transitive_reduction(graph: RecipeAdjListGraph) -> RecipeAdjListGraph:
     reduced_graph = graph.model_copy(deep=True)
 
     node_ids = reduced_graph.adjacency_list.keys()
@@ -38,7 +39,7 @@ def get_transitive_reduction(graph: RecipeGraph) -> RecipeGraph:
     return reduced_graph
 
 
-def get_topological_order(graph: RecipeGraph) -> list[int]:
+def get_topological_order(graph: RecipeAdjListGraph) -> list[int]:
     # calculate in-degree for each node in graph
     node_id_to_in_degree_map = {node_id: 0 for node_id in graph.adjacency_list.keys()}
     for u in graph.nodes:
@@ -70,7 +71,7 @@ def get_topological_order(graph: RecipeGraph) -> list[int]:
     return topological_order
 
 
-def create_recipe_schedule(graph: RecipeGraph, max_width: int) -> RecipeSchedule:
+def create_recipe_schedule(graph: RecipeAdjListGraph, max_width: int) -> RecipeSchedule:
     schedule = RecipeSchedule(recipe_graph=graph, max_width=max_width)  # store result
 
     # run first two steps in Coffman–Graham algorithm
