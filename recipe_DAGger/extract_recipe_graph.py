@@ -1,16 +1,9 @@
 import os
 
 import datasets
-from dotenv import load_dotenv
 from openai import OpenAI
 
 from recipe_graph import RecipeEdgeListGraph
-
-load_dotenv("../.env")
-
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
-client = OpenAI(api_key=OPENAI_API_KEY)
 
 recipe_nlg_dataset = datasets.load_dataset(
     "mbien/recipe_nlg",
@@ -38,6 +31,10 @@ def get_recipe_text_from_nlg_hf(recipe_idx: int = 0):
 
 
 def get_recipe_graph(recipe_text: str):
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+    client = OpenAI(api_key=OPENAI_API_KEY)
+
     # Construct prompt from recipe_text
     prompt = (
         "You are helping create a directed acyclic graph (DAG) representation of a recipe from recipe text.\n"
