@@ -1,5 +1,6 @@
+import pandas as pd
 from pydantic import BaseModel
-
+from datetime import datetime
 from recipe_graph import RecipeAdjListGraph
 
 
@@ -8,17 +9,45 @@ class RecipeSchedule(BaseModel):
     max_width: int
     levels: dict[int, list[int]] = {}
 
-    def print_report(self):
-        for i, level in enumerate(reversed(self.levels.keys())):
-            print(f"Tasks for time step {i + 1}:")
+    def gantt_df(self):
+        time_intervals = pd.interval_range(
+            start=datetime.now(), periods=len(self.levels.keys()), freq="15min"
+        )
 
-            tasks = []
+        tasks = []
+        for i, level in enumerate(reversed(self.levels.keys())):
+            time_interval = time_intervals[i]
             for j, u_id in enumerate(self.levels[level]):
                 tasks.append(
-                    f"\tChef {j}: {self.recipe_graph.get_node_by_id(u_id).instr}"
+                    {
+                        "Start Time": time_interval.left,
+                        "End Time": time_interval.right,
+                        "Chef": f"Chef {j + 1}",
+                        "Step": f"Step {u_id + 1}",
+                        "Task Description": self.recipe_graph.get_node_by_id(
+                            u_id
+                        ).instr,
+                    }
                 )
 
-            print("\n".join(tasks))
+        return pd.DataFrame(tasks)
+
+    def report(self):
+        report = {}
+        for time_step, level in enumerate(reversed(self.levels.keys())):
+            tasks = []
+            for chef_id, u_id in enumerate(self.levels[level]):
+                tasks.append(
+                    f"\tChef {chef_id}: {self.recipe_graph.get_node_by_id(u_id).instr}"
+                )
+            report[time_step] = tasks
+        return report
+
+    def print_report(self):
+        report = self.report()
+        for time_step in sorted(report.keys()):
+            print(f"Tasks for time step {time_step}:")
+            print("\n".join(report[time_step]))
 
 
 def get_transitive_reduction(graph: RecipeAdjListGraph) -> RecipeAdjListGraph:

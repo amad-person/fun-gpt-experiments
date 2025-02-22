@@ -5,3 +5,4 @@ datasets==3.3.0
 pydantic==2.10.6
 streamlit==1.42.0
 beautifulsoup4==4.13.3
+plotly[express]==6.0.0
