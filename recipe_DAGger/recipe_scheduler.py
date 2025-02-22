@@ -1,6 +1,8 @@
+from datetime import datetime
+
 import pandas as pd
 from pydantic import BaseModel
-from datetime import datetime
+
 from recipe_graph import RecipeAdjListGraph
 
 

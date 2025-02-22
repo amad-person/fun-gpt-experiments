@@ -1,10 +1,12 @@
 import re
 import string
-from dotenv import load_dotenv
+
+import plotly.express as px
 import streamlit as st
+from dotenv import load_dotenv
+
 from extract_recipe_graph import get_recipe_graph, get_recipe_text_from_nlg_hf
 from recipe_scheduler import create_recipe_schedule
-import plotly.express as px
 
 # PAGE CONFIG
 st.set_page_config(page_title="Recipe DAGger", layout="wide")
@@ -13,6 +15,9 @@ st.set_page_config(page_title="Recipe DAGger", layout="wide")
 st.sidebar.title("Menu")
 
 env_path = st.sidebar.text_input("Enter path to .env file:", value=".env")
+st.sidebar.caption(
+    ":warning: Make sure your .env file has `OPENAI_API_KEY` set to [your OpenAI API key](https://platform.openai.com/docs/quickstart)."
+)
 load_dotenv(env_path)
 
 
