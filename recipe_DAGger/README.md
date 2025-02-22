@@ -3,7 +3,7 @@
 ![recipe_dagger_app.png](recipe_dagger_app.png)
 
 Inputs: 
-- Recipe
+- [x] Recipe
   - [ ] Link to any recipe page
   - [x] A default recipe from the [recipe_nlg_hf_data](https://huggingface.co/datasets/mbien/recipe_nlg)
 - [x] Number of chefs 
