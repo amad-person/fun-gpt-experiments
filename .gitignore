@@ -1,3 +1,4 @@
 .env
 .idea/
 /recipe_DAGger/recipe_nlg_hf_data/
+__pycache__
