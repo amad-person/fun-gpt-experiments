@@ -1,9 +1,11 @@
-from code import compute_elementwise_sum, compute_mean
+from code import compute_elementwise_sum
+from code import compute_mean
 
 import numpy as np
 
-from decorators import test_data, test_settings
-from generators import Integers
+from btester.decorators import test_data
+from btester.decorators import test_settings
+from btester.generators import Integers
 
 
 @test_settings(n_times=10)
