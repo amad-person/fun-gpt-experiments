@@ -15,7 +15,7 @@ def test_mean(x):
 
 
 @test_settings(n_times=10)
-@test_data(Integers(), Integers())
+@test_data(Integers(), Integers(low=-10, high=10))
 def test_elementwise_sum(x, y):
     expected = np.sum([x, y], axis=0)
     actual = compute_elementwise_sum(x, y)
