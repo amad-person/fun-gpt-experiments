@@ -4,3 +4,7 @@ format:
 	black demo
 	isort src
 	isort demo
+
+.PHONY: lint
+lint:
+	mypy src
