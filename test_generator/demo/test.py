@@ -1,12 +1,15 @@
 from code import compute_elementwise_sum
 from code import compute_mean
+from code import concat_elementwise_strings
 
 import numpy as np
 from custom_generators import NormalFloats
 
 from btester.conditions import AssertAllClose
+from btester.conditions import AssertEqual
 from btester.decorators import test_data
 from btester.decorators import test_settings
+from btester.generators import FakerValues
 from btester.generators import Integers
 
 
@@ -37,7 +40,19 @@ def test_elementwise_sum_normal_floats(x, y):
     condition.check(expected, actual)
 
 
+@test_settings(n_times=10)
+@test_data(
+    FakerValues(faker_func_name="first_name"), FakerValues(faker_func_name="last_name")
+)
+def test_concat_elementwise_first_name_last_name(x, y):
+    expected = [f"{x_i};{y_i}" for x_i, y_i in zip(x, y)]
+    actual = concat_elementwise_strings(x, y, delim=";")
+    condition = AssertEqual()
+    condition.check(expected, actual)
+
+
 if __name__ == "__main__":
     test_mean()
     test_elementwise_sum_ints()
     test_elementwise_sum_normal_floats()
+    test_concat_elementwise_first_name_last_name()
