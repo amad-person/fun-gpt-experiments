@@ -4,6 +4,7 @@ from code import compute_mean
 import numpy as np
 from custom_generators import NormalFloats
 
+from btester.conditions import AssertAllClose
 from btester.decorators import test_data
 from btester.decorators import test_settings
 from btester.generators import Integers
@@ -14,7 +15,8 @@ from btester.generators import Integers
 def test_mean(x):
     expected = np.mean(x)
     actual = compute_mean(x)
-    np.allclose(expected, actual)
+    condition = AssertAllClose()
+    condition.check(expected, actual)
 
 
 @test_settings(n_times=10)
@@ -22,15 +24,8 @@ def test_mean(x):
 def test_elementwise_sum_ints(x, y):
     expected = np.sum([x, y], axis=0)
     actual = compute_elementwise_sum(x, y)
-    np.allclose(expected, actual)
-
-
-@test_settings(n_times=10)
-@test_data(Integers(), Integers(low=-10, high=10))
-def test_elementwise_sum_ints(x, y):
-    expected = np.sum([x, y], axis=0)
-    actual = compute_elementwise_sum(x, y)
-    np.allclose(expected, actual)
+    condition = AssertAllClose()
+    condition.check(expected, actual)
 
 
 @test_settings(n_times=10)
@@ -38,7 +33,8 @@ def test_elementwise_sum_ints(x, y):
 def test_elementwise_sum_normal_floats(x, y):
     expected = np.sum([x, y], axis=0)
     actual = compute_elementwise_sum(x, y)
-    np.allclose(expected, actual)
+    condition = AssertAllClose()
+    condition.check(expected, actual)
 
 
 if __name__ == "__main__":
